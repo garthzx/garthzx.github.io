@@ -1,4 +1,5 @@
 export const site = {
+	url: 'https://garthzx.github.io',
 	name: 'Garth Dustin',
 	fullName: 'Garth Dustin P. Ayang-ang',
 	role: 'Full-Stack Software Engineer',
