@@ -8,9 +8,7 @@
 <section id="projects" class="shell scroll-mt-24 py-20 sm:py-28">
 	<div class="flex flex-wrap items-end justify-between gap-4" use:reveal>
 		<h2 class="section-title">Projects</h2>
-		<p class="font-mono text-sm text-ink-faint">
-			Academic work &amp; things built for the fun of it
-		</p>
+		<p class="font-mono text-sm text-ink-faint">Side projects &amp; academic work</p>
 	</div>
 
 	<div class="mt-12 grid gap-6 sm:grid-cols-2">

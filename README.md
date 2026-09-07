@@ -46,16 +46,23 @@ src/
   screen readers and with JS disabled. There is a **skip** button in its title bar.
 - **Motion is opt-out.** `prefers-reduced-motion` disables the typewriter, the reveals, and the
   terminal sequence; without JS everything renders visible.
-- **Project artwork.** Projects without a screenshot (Retinal Disease Classification, iSkor,
-  Online Voting System) get purpose-drawn inline SVG in `ProjectArt.svelte`, coloured from the
-  same CSS custom properties as the rest of the site so they stay in step with the palette.
+- **Project artwork.** Projects without a screenshot (Retinal Disease Classification, iSkor) get
+  purpose-drawn inline SVG in `ProjectArt.svelte`, coloured from the same CSS custom properties as
+  the rest of the site so they stay in step with the palette.
 - **Photo mosaic.** The "Away from the keyboard" grid is a 4-column mosaic with one 2×2 feature
   tile, collapsing to 2 columns on phones. Per-photo `object-position` values in `gallery.ts` keep
   faces in frame; captions are hover-revealed on pointer devices and always shown on touch.
 
 ## Deployment
 
-The project uses `@sveltejs/adapter-auto`, which detects Vercel/Netlify/Cloudflare automatically
-but has no target configured for anything else. The site is fully static — for GitHub Pages (where
-the old portfolio lived) swap in `@sveltejs/adapter-static` with `prerender = true` and set
-`paths.base` to the repository name.
+Deployed to GitHub Pages at <https://garthzx.github.io> via `.github/workflows/deploy.yml`, which
+builds on every push to `main` and publishes with `actions/deploy-pages`.
+
+The build is fully static: `@sveltejs/adapter-static` with `prerender = true` in `+layout.ts`. Two
+details matter for Pages — `static/.nojekyll`, because Jekyll otherwise strips the `_app` directory
+and the site loads with no CSS or JS; and **Settings → Pages → Source must be "GitHub Actions"**,
+not "Deploy from a branch", or GitHub's legacy Jekyll builder races this workflow and publishes a
+rendered `README.md` instead of the site.
+
+The repo is the user site `garthzx.github.io`, so there is no `paths.base` to configure. The share
+card is regenerated with `python3 scripts/build-og-image.py`.

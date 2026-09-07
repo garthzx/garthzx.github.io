@@ -1,4 +1,5 @@
 import type { ArtName } from '$lib/components/ProjectArt.svelte';
+import soilMates from '$lib/assets/projects/soil-mates.png';
 import doodle from '$lib/assets/projects/doodle.png';
 import gelic from '$lib/assets/projects/gelic.png';
 import extrack from '$lib/assets/projects/extrack.png';
@@ -19,6 +20,21 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+	{
+		id: 'soil-mates',
+		title: 'Soil Mates',
+		blurb: 'An online plant store, front to back.',
+		description:
+			'A storefront for plants, pots and potting mix — product catalogue with sale pricing, cart, wishlist and side-by-side comparison. Svelte 5 on the front, a Hono API behind it, Neon Postgres for data, and Better Auth handling accounts.',
+		image: soilMates,
+		techUsed: ['Svelte 5', 'Hono', 'Neon', 'Better Auth', 'TypeScript'],
+		link: {
+			href: 'https://github.com/garthzx/Soil-Mates',
+			kind: 'github',
+			label: 'Soil Mates on GitHub'
+		},
+		year: '2026'
+	},
 	{
 		id: 'retinal',
 		title: 'Retinal Disease Classification',

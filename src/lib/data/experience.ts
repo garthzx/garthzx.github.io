@@ -119,6 +119,7 @@ export const skillGroups = [
 			'Zod',
 			'OpenAPI',
 			'JWT',
+			'Better Auth',
 			'ASP.NET Core'
 		]
 	},
