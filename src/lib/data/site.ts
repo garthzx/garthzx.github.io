@@ -4,7 +4,7 @@ export const site = {
 	fullName: 'Garth Dustin P. Ayang-ang',
 	role: 'Full-Stack Software Engineer',
 	focus: 'Backend Systems & Business Automation',
-	location: 'Mandaluyong City, Philippines',
+	location: 'Tuguegarao City, Philippines',
 	email: 'garthayangang@outlook.com',
 	phone: '+63 915 639 0954',
 	phoneHref: '+639156390954',
