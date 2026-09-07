@@ -14,7 +14,7 @@ export const site = {
 	},
 	socials: {
 		github: 'https://github.com/garthzx',
-		linkedin: 'https://www.linkedin.com/in/garth-ayang-ang-378a94262/'
+		linkedin: 'https://www.linkedin.com/in/garth-dustin-ayang-ang-7335ab324/'
 	}
 } as const;
 
