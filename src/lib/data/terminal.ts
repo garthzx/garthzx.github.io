@@ -53,8 +53,8 @@ export const blocks: Block[] = [
 			pair('title', 'Full-Stack Software Engineer'),
 			pair('since', 'August 2025'),
 			pair('remote', 'Australia'),
-			{ ...pair('owns', '[ tenant provisioning, telephony, payments ]'), last: true },
-			{ kind: 'brace', text: '}' }
+			// { ...pair('owns', '[ tenant provisioning, telephony, payments ]'), last: true },
+			// { kind: 'brace', text: '}' }
 		]
 	},
 	{
