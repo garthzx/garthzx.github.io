@@ -1,102 +1,107 @@
-import type { ArtName } from '$lib/components/ProjectArt.svelte';
-import soilMates from '$lib/assets/projects/soil-mates.png';
-import doodle from '$lib/assets/projects/doodle.png';
+import soilHero from '$lib/assets/projects/soil-mates-hero.jpg';
+import soilCatalogue from '$lib/assets/projects/soil-mates-catalogue.jpg';
 import gelic from '$lib/assets/projects/gelic.png';
 import extrack from '$lib/assets/projects/extrack.png';
+import doodle from '$lib/assets/projects/doodle.png';
+
+export const featured = {
+	title: 'Soil Mates',
+	year: '2026',
+	description:
+		'An online plant store, front to back: catalogue with sale pricing, cart, wishlist and side-by-side comparison. Svelte 5 on the front, a Hono API behind it, Neon Postgres for data, and Better Auth handling accounts.',
+	tech: ['Svelte 5', 'Hono', 'Neon', 'Better Auth', 'TypeScript'],
+	href: 'https://github.com/garthzx/Soil-Mates',
+	slides: [
+		{
+			src: soilHero,
+			alt: 'Soil Mates hero: plants, pots and the dirt in between',
+			caption: 'Landing hero'
+		},
+		{
+			src: soilCatalogue,
+			alt: 'Soil Mates new arrivals product grid with sale pricing',
+			caption: 'Product catalogue with sale pricing'
+		}
+	]
+};
+
+/** A typographic plate stands in for projects with no screenshot. */
+export type Plate = { top: string; mid: string; lines: string[] };
 
 export type Project = {
-	id: string;
 	title: string;
-	blurb: string;
-	description: string;
-	image?: string;
-	/** Vector artwork drawn in place of a screenshot. */
-	art?: ArtName;
-	techUsed: string[];
-	/** Where the project lives — a repository, or the published paper. */
-	link?: { href: string; kind: 'github' | 'paper'; label: string };
-	note?: string;
 	year: string;
+	description: string;
+	tech: string[];
+	href: string;
+	linkLabel: string;
+	alt: string;
+	image?: string;
+	plate?: Plate;
 };
 
 export const projects: Project[] = [
 	{
-		id: 'soil-mates',
-		title: 'Soil Mates',
-		blurb: 'An online plant store, front to back.',
-		description:
-			'A storefront for plants, pots and potting mix — product catalogue with sale pricing, cart, wishlist and side-by-side comparison. Svelte 5 on the front, a Hono API behind it, Neon Postgres for data, and Better Auth handling accounts.',
-		image: soilMates,
-		techUsed: ['Svelte 5', 'Hono', 'Neon', 'Better Auth', 'TypeScript'],
-		link: {
-			href: 'https://github.com/garthzx/Soil-Mates',
-			kind: 'github',
-			label: 'Soil Mates on GitHub'
-		},
-		year: '2026'
-	},
-	{
-		id: 'retinal',
 		title: 'Retinal Disease Classification',
-		blurb: 'Undergraduate thesis — accepted at ICITE 2023.',
-		description:
-			'Multi-label classification of retinal disease from fundus images on a heavily class-imbalanced dataset. The work behind the accompanying paper accepted at ICITE 2023 in Boracay.',
-		art: 'retina',
-		techUsed: ['Python', 'Deep Learning', 'Computer Vision'],
-		link: {
-			href: 'http://urdc.usl.edu.ph/journals/jeai/papers/vol3/vol%203%20series%202023-41-46.pdf',
-			kind: 'paper',
-			label: 'Read the published paper (PDF)'
+		year: '2024',
+		alt: 'Typographic plate: undergraduate thesis, paper accepted at ICITE 2023',
+		plate: {
+			top: 'Thesis · Paper',
+			mid: 'Multi-label classification of retinal disease from fundus images',
+			lines: ['ICITE 2023', 'Boracay, PH', 'Python']
 		},
-		note: 'Paper — ICITE 2023',
-		year: '2024'
-	},
-	{
-		id: 'iskor',
-		title: 'iSkor',
-		blurb: 'Events management for a university.',
 		description:
-			'An events management system built for university-wide use — event creation, scheduling, and attendance handling, built in ASP.NET Core.',
-		art: 'scoreboard',
-		techUsed: ['ASP.NET Core', 'C#', 'MS SQL Server', 'Bootstrap'],
-		link: { href: 'https://github.com/garthzx/iSkor', kind: 'github', label: 'iSkor on GitHub' },
-		year: '2023'
+			'Undergraduate thesis on a heavily class-imbalanced fundus image dataset. The accompanying paper was accepted at ICITE 2023 in Boracay.',
+		tech: ['Python', 'Deep Learning', 'Computer Vision'],
+		href: 'http://urdc.usl.edu.ph/journals/jeai/papers/vol3/vol%203%20series%202023-41-46.pdf',
+		linkLabel: 'Read the paper'
 	},
 	{
-		id: 'gelic',
+		title: 'iSkor',
+		year: '2023',
+		alt: 'Typographic plate: iSkor, university events management system',
+		plate: {
+			top: 'University system',
+			mid: 'Event creation, scheduling and attendance',
+			lines: ['ASP.NET Core', 'C#', 'MS SQL Server']
+		},
+		description:
+			'An events management system built for university-wide use: event creation, scheduling, and attendance handling, built in ASP.NET Core.',
+		tech: ['ASP.NET Core', 'C#', 'MS SQL Server', 'Bootstrap'],
+		href: 'https://github.com/garthzx/iSkor',
+		linkLabel: 'GitHub'
+	},
+	{
 		title: 'Gelic',
-		blurb: 'A dynamically typed, C-syntax language.',
+		year: '2023',
+		image: gelic,
+		alt: 'Gelic source code and interpreter output in a terminal',
 		description:
 			'A dynamically typed programming language with C-style syntax, written from scratch in Python 3. Supports arithmetic operations, conditional statements, and loops.',
-		image: gelic,
-		techUsed: ['Python'],
-		link: { href: 'https://github.com/garthzx/gelic', kind: 'github', label: 'Gelic on GitHub' },
-		year: '2023'
+		tech: ['Python'],
+		href: 'https://github.com/garthzx/gelic',
+		linkLabel: 'GitHub'
 	},
 	{
-		id: 'extrack',
 		title: 'ExTrack',
-		blurb: 'Expense tracking with reporting built in.',
-		description:
-			'An expense tracker application written in ASP.NET Core MVC, with Bootstrap 5 and Syncfusion for the reporting and charting layer.',
+		year: '2023',
 		image: extrack,
-		techUsed: ['ASP.NET MVC', 'C#', 'Bootstrap', 'Syncfusion'],
-		link: {
-			href: 'https://github.com/garthzx/ExTrack',
-			kind: 'github',
-			label: 'ExTrack on GitHub'
-		},
-		year: '2023'
+		alt: 'ExTrack dashboard with expense charts',
+		description:
+			'An expense tracker written in ASP.NET Core MVC, with Bootstrap 5 and Syncfusion for the reporting and charting layer.',
+		tech: ['ASP.NET MVC', 'C#', 'Bootstrap', 'Syncfusion'],
+		href: 'https://github.com/garthzx/ExTrack',
+		linkLabel: 'GitHub'
 	},
 	{
-		id: 'doodle',
 		title: 'Doodle',
-		blurb: 'A search engine, built the long way round.',
-		description:
-			'A search engine in the shape of Google’s — crawling, indexing, and ranking sites and images out of a MySQL database.',
+		year: '2022',
 		image: doodle,
-		techUsed: ['PHP', 'MySQL', 'JavaScript', 'CSS3'],
-		link: { href: 'https://github.com/garthzx/doodle', kind: 'github', label: 'Doodle on GitHub' },
-		year: '2022'
+		alt: 'Doodle search engine results page',
+		description:
+			'A search engine in the shape of Google’s: crawling, indexing, and ranking sites and images out of a MySQL database.',
+		tech: ['PHP', 'MySQL', 'JavaScript', 'CSS3'],
+		href: 'https://github.com/garthzx/doodle',
+		linkLabel: 'GitHub'
 	}
 ];

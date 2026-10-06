@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#4b5320"/>
+  <!-- Happy path: start, two completed steps, on to the failure -->
+  <path d="M16 16H48V48H16" fill="none" stroke="#f6f4ec" stroke-width="4.5" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="6.5" fill="#f6f4ec"/>
+  <circle cx="48" cy="16" r="6.5" fill="#f6f4ec"/>
+  <circle cx="48" cy="48" r="6.5" fill="#f6f4ec"/>
+  <!-- Failed step -->
+  <path d="M16 41L23 48L16 55L9 48Z" fill="#c29a5b"/>
+  <!-- Rollback, back up to the start -->
+  <path d="M16 40.5V31" fill="none" stroke="#c29a5b" stroke-width="4.5" stroke-dasharray="3 2.5"/>
+  <path d="M10 31.5L16 24L22 31.5Z" fill="#c29a5b"/>
+</svg>

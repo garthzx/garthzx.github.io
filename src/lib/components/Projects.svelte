@@ -1,79 +1,127 @@
 <script lang="ts">
-	import { projects } from '$lib/data/projects';
-	import { reveal } from '$lib/actions/reveal';
 	import Icon from './Icon.svelte';
-	import ProjectArt from './ProjectArt.svelte';
+	import SectionRule from './SectionRule.svelte';
+	import { featured, projects } from '$lib/data/projects';
+	import { inview } from '$lib/motion.svelte';
+	import { swipe } from '$lib/swipe';
+
+	const pad2 = (n: number) => String(n).padStart(2, '0');
+	const n = featured.slides.length;
+
+	let slide = $state(0);
+	const step = (d: number) => (slide = (slide + d + n) % n);
 </script>
 
-<section id="projects" class="shell scroll-mt-24 py-20 sm:py-28">
-	<div class="flex flex-wrap items-end justify-between gap-4" use:reveal>
-		<h2 class="section-title">Projects</h2>
-		<p class="font-mono text-sm text-ink-faint">Side projects &amp; academic work</p>
+<section id="projects" aria-labelledby="proj-title" class="shell section">
+	<div class="head">
+		<SectionRule num="03" meta="2022–2026" />
+		<h2 id="proj-title" class="h-section" data-reveal use:inview>Projects</h2>
 	</div>
 
-	<div class="mt-12 grid gap-6 sm:grid-cols-2">
-		{#each projects as project, i (project.id)}
-			<article
-				class="card group flex flex-col overflow-hidden rounded-2xl border border-hairline bg-white/80"
-				use:reveal={{ delay: (i % 2) * 90 }}
-			>
-				<!-- Media -->
-				<div class="relative aspect-[16/10] overflow-hidden">
-					{#if project.image}
+	<article class="featured" data-reveal use:inview>
+		<div class="feat-media">
+			<div class="mat" data-lift>
+				<div
+					class="stage"
+					role="group"
+					aria-roledescription="carousel"
+					aria-label="{featured.title} screenshots"
+					use:swipe={step}
+				>
+					{#each featured.slides as s, i (s.src)}
 						<img
-							src={project.image}
-							alt="{project.title} screenshot"
+							src={s.src}
+							alt={s.alt}
 							loading="lazy"
-							class="size-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+							draggable="false"
+							class:on={i === slide}
+							aria-hidden={i === slide ? undefined : 'true'}
 						/>
-					{:else if project.art}
-						<div class="placeholder relative grid size-full place-items-center p-4">
-							<ProjectArt name={project.art} id={project.id} />
-						</div>
-					{/if}
-
-					<span
-						class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 font-mono text-xs text-ink-soft backdrop-blur-sm"
-						>{project.year}</span
-					>
-
-					{#if project.note}
-						<span
-							class="absolute top-3 right-3 rounded-full bg-brand px-2.5 py-1 font-mono text-xs text-white"
-							>{project.note}</span
-						>
-					{/if}
+					{/each}
 				</div>
-
-				<!-- Body -->
-				<div class="flex flex-1 flex-col p-5">
-					<div class="flex items-start justify-between gap-3">
-						<h3 class="text-xl font-bold">{project.title}</h3>
-						{#if project.link}
-							<a
-								href={project.link.href}
-								target="_blank"
-								rel="noreferrer"
-								aria-label={project.link.label}
-								title={project.link.label}
-								class="-m-1.5 shrink-0 rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-brand-tint hover:text-brand"
+				<div class="controls">
+					<div class="dots">
+						{#each featured.slides as s, i (s.src)}
+							<button
+								type="button"
+								onclick={() => (slide = i)}
+								aria-label="Show screenshot {i + 1}: {s.caption}"
+								aria-current={i === slide ? 'true' : undefined}
 							>
-								<Icon name={project.link.kind === 'paper' ? 'external' : 'github'} size={20} />
-							</a>
-						{/if}
-					</div>
-
-					<p class="mt-1.5 text-sm font-medium text-brand">{project.blurb}</p>
-					<p class="mt-3 text-[0.95rem] leading-relaxed text-ink-soft">{project.description}</p>
-
-					<div class="mt-5 flex flex-wrap gap-1.5 border-t border-hairline pt-4">
-						{#each project.techUsed as tech (tech)}
-							<span
-								class="rounded-md border border-mint/70 bg-white px-2 py-1 text-[0.8rem] text-ink-soft"
-								>{tech}</span
-							>
+								<span class:on={i === slide}></span>
+							</button>
 						{/each}
 					</div>
+					<div class="arrows">
+						<span class="counter" aria-live="polite">{pad2(slide + 1)} / {pad2(n)}</span>
+						<button
+							type="button"
+							class="arrow"
+							onclick={() => step(-1)}
+							aria-label="Previous screenshot"><Icon name="arrow-left" /></button
+						>
+						<button type="button" class="arrow" onclick={() => step(1)} aria-label="Next screenshot"
+							><Icon name="arrow-right" /></button
+						>
+					</div>
+				</div>
+			</div>
+			<span class="plate-caption mono-label"
+				>Plate {pad2(slide + 1)} — {featured.slides[slide].caption}</span
+			>
+		</div>
+
+		<div class="feat-copy">
+			<span class="mono-label brass">Featured · {featured.year}</span>
+			<h3>{featured.title}</h3>
+			<p>{featured.description}</p>
+			<div class="tags">
+				{#each featured.tech as t (t)}<span class="tag">{t}</span>{/each}
+			</div>
+			<a href={featured.href} class="arrow-link" data-nudge
+				>View on GitHub<Icon name="arrow-right" /></a
+			>
+		</div>
+	</article>
+
+	<div class="subhead mono-label" data-reveal use:inview>
+		<span>University &amp; early work</span>
+		<span aria-hidden="true" class="line" data-rule use:inview></span>
+		<span class="muted">2022–2024</span>
+	</div>
+
+	<div class="grid">
+		{#each projects as p, i (p.title)}
+			<article data-reveal data-delay={(i % 3) + 1} use:inview>
+				<div class="mat" data-zoomable data-lift>
+					{#if p.image}
+						<div class="shot">
+							<img src={p.image} alt={p.alt} loading="lazy" />
+						</div>
+					{:else if p.plate}
+						<div class="plate" role="img" aria-label={p.alt}>
+							<div class="plate-top"><span>{p.plate.top}</span><span>{p.year}</span></div>
+							<div class="plate-mid"><span>{p.plate.mid}</span></div>
+							<div class="plate-lines">
+								{#each p.plate.lines as l (l)}<span>{l}</span>{/each}
+							</div>
+						</div>
+					{/if}
+				</div>
+				<div class="card-body">
+					<div class="card-title">
+						<h3>{p.title}</h3>
+						<span class="year">{p.year}</span>
+					</div>
+					<p>{p.description}</p>
+					<div class="tags">
+						{#each p.tech as t (t)}<span class="tag">{t}</span>{/each}
+					</div>
+					<a href={p.href} class="arrow-link small" data-nudge
+						>{p.linkLabel}<Icon name="external" size={14} /><span class="sr-only-text">
+							— {p.title}</span
+						></a
+					>
 				</div>
 			</article>
 		{/each}
@@ -81,33 +129,283 @@
 </section>
 
 <style>
-	.card {
-		box-shadow: 0 4px 12px -8px rgb(82 95 127 / 0.35);
-		transition:
-			transform 0.35s var(--ease-out-soft),
-			box-shadow 0.35s var(--ease-out-soft),
-			border-color 0.35s var(--ease-out-soft);
+	.head {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		margin-bottom: clamp(32px, 4vw, 56px);
+	}
+	.brass {
+		color: var(--brass-text);
+	}
+	.muted {
+		color: var(--muted);
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
 	}
 
-	.card:hover {
-		transform: translateY(-5px);
-		border-color: color-mix(in srgb, var(--color-brand) 40%, transparent);
-		box-shadow: 0 18px 36px -22px rgb(82 95 127 / 0.6);
+	/* Featured */
+	.featured {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 28px clamp(32px, 5vw, 72px);
+		margin-bottom: clamp(64px, 8vw, 104px);
 	}
-
-	.placeholder {
-		background:
-			radial-gradient(circle at 30% 25%, rgb(116 127 224 / 0.16), transparent 60%),
-			linear-gradient(140deg, #f4f5fe 0%, #eceefc 100%);
+	.feat-media {
+		flex: 1.7 1 520px;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
 	}
-
-	.placeholder::before {
-		content: '';
+	.mat {
+		padding: 12px;
+		background: var(--tint);
+		border: 1px solid var(--hair);
+		border-radius: 2px;
+	}
+	.stage {
+		position: relative;
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+		border: 1px solid var(--hair);
+		border-radius: 1px;
+		background: var(--surface);
+		touch-action: pan-y;
+		cursor: grab;
+	}
+	.stage img {
 		position: absolute;
 		inset: 0;
-		background-image:
-			linear-gradient(rgb(116 127 224 / 0.07) 1px, transparent 1px),
-			linear-gradient(90deg, rgb(116 127 224 / 0.07) 1px, transparent 1px);
-		background-size: 22px 22px;
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: top left;
+		opacity: 0;
+		transform: scale(1.03);
+		transition:
+			opacity 600ms var(--ez),
+			transform 1200ms var(--ez);
+		user-select: none;
+	}
+	.stage img.on {
+		opacity: 1;
+		transform: none;
+	}
+	.controls {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		padding-top: 12px;
+	}
+	.dots {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+	.dots button {
+		display: flex;
+		align-items: center;
+		height: 32px;
+		padding: 0 3px;
+		background: none;
+		border: 0;
+		cursor: pointer;
+	}
+	.dots button span {
+		display: block;
+		width: 14px;
+		height: 2px;
+		background: var(--sage);
+		transition:
+			width 300ms var(--ez),
+			background-color 300ms ease;
+	}
+	.dots button span.on {
+		width: 28px;
+		background: var(--brand);
+	}
+	.arrows {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.counter {
+		min-width: 64px;
+		text-align: right;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		letter-spacing: 0.06em;
+		color: var(--muted);
+	}
+	.arrow {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		padding: 0;
+		background: var(--surface);
+		color: var(--ink);
+		border: 1px solid var(--hair);
+		border-radius: 4px;
+		cursor: pointer;
+	}
+	.arrow:hover {
+		border-color: var(--brand);
+		color: var(--brand);
+	}
+	.arrow:active {
+		transform: translateY(1px);
+	}
+	.plate-caption {
+		font-size: 11px;
+		letter-spacing: 0.1em;
+		color: var(--muted);
+	}
+	.feat-copy {
+		flex: 1 1 300px;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+	.feat-copy h3 {
+		margin: 0;
+		font-family: var(--font-serif);
+		font-weight: 400;
+		font-size: clamp(30px, 3.2vw, 39px);
+		line-height: 1.1;
+		letter-spacing: -0.01em;
+		color: var(--deep);
+		font-variation-settings: 'opsz' 40;
+	}
+	.feat-copy p {
+		margin: 0;
+		text-wrap: pretty;
+	}
+
+	/* Early work */
+	.subhead {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 32px;
+	}
+	.subhead .line {
+		flex: 1;
+		height: 1px;
+		background: var(--hair);
+	}
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+		gap: 56px 32px;
+	}
+	.grid article {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.grid .mat {
+		padding: 10px;
+	}
+	.shot {
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+		border: 1px solid var(--hair);
+		border-radius: 1px;
+		background: var(--surface);
+	}
+	.shot img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: top left;
+	}
+	.plate {
+		box-sizing: border-box;
+		aspect-ratio: 16 / 10;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding: clamp(14px, 2vw, 20px);
+		background: var(--surface);
+		border: 1px solid var(--hair);
+		border-radius: 1px;
+	}
+	.plate-top {
+		display: flex;
+		justify-content: space-between;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--muted);
+	}
+	.plate-mid {
+		padding: 12px 0;
+		border-top: 1px solid var(--ink);
+		border-bottom: 1px solid var(--hair);
+		font-family: var(--font-serif);
+		font-style: italic;
+		font-size: clamp(22px, 2.4vw, 28px);
+		line-height: 1.15;
+		color: var(--deep);
+		font-variation-settings: 'opsz' 28;
+	}
+	.plate-lines {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 14px;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		letter-spacing: 0.06em;
+		color: var(--brass-text);
+	}
+	.card-body {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.card-title {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 16px;
+	}
+	.card-title h3 {
+		margin: 0;
+		font-family: var(--font-serif);
+		font-weight: 500;
+		font-size: 23px;
+		line-height: 1.2;
+		color: var(--deep);
+		font-variation-settings: 'opsz' 24;
+	}
+	.year {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: var(--muted);
+	}
+	.card-body p {
+		margin: 0;
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--muted);
+		text-wrap: pretty;
+	}
+	.card-body .tags {
+		margin-top: 4px;
+	}
+	.arrow-link.small {
+		position: relative;
+		gap: 6px;
 	}
 </style>

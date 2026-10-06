@@ -1,8 +1,9 @@
 # web-portfolio
 
-Personal portfolio for Garth Dustin P. Ayang-ang — a SvelteKit 5 + Tailwind CSS 4 rebuild of the
-original Create React App site, keeping the same visual identity (periwinkle `#747fe0` on
-ghostwhite, JetBrains Mono wordmark, Ubuntu-style terminal) with a reworked layout.
+Personal portfolio for Garth Dustin Ayang-ang, built in SvelteKit 5 and Tailwind CSS 4. The design
+— army green on warm paper, Newsreader / IBM Plex Sans / JetBrains Mono, architecture diagrams as
+the signature — comes from the Claude Design project "Screens design system files" (`Home.dc.html`,
+`Case Study.dc.html`, `System Diagram.dc.html`).
 
 ## Running it
 
@@ -18,40 +19,42 @@ Other scripts: `npm run build`, `npm run preview`, `npm run check` (svelte-check
 
 ```
 src/
+  app.html              fonts; pre-paint script for theme, motion and the intro
   routes/
-    +layout.svelte      shell
-    layout.css          Tailwind v4 @theme tokens, base + component layers
-    +page.svelte        section order, <head> metadata
+    layout.css          design tokens (light + dark), shared primitives, motion
+    +page.svelte        home: section order, <head> metadata
+    work/[slug]/        case-study pages, one per system, prerendered
   lib/
     data/               all copy lives here — edit these, not the components
-      site.ts           name, role, contact details, nav
-      experience.ts     roles, education, achievements, skill groups
-      projects.ts       project cards
-      gallery.ts        "Away from the keyboard" photos, crops and captions
-      terminal.ts       the terminal's commands and JSON output
-    components/         Header, Work, Projects, ProjectArt, About, Terminal,
-                        AwayFromKeyboard, Contact, Icon
-    actions/reveal.ts   scroll-reveal action (replaces the old AOS dependency)
-    assets/             photos and project screenshots
+      site.ts           name, role, location, contact, nav, hero facts
+      cases.ts          the three case studies (home summary + full write-up)
+      diagrams.ts       diagram geometry: nodes, edges, lanes, notes
+      experience.ts     roles, education and recognition
+      projects.ts       featured project + early work
+      toolkit.ts        skill groups, tools, orbit layout
+      tool-icons.ts     Simple Icons paths for the toolkit field
+      trips.ts          stops, photos, captions, slideshow layouts
+    components/         one per section, plus SystemDiagram, Lightbox, Loader, Icon
+    motion.svelte.ts    `inview` reveal action; intro state
+    theme.svelte.ts     light/dark toggle, persisted per visitor
+    assets/             portrait, trip photos, project screenshots
+static/                 résumé PDF, favicon, OG card, .nojekyll
 ```
 
-## Notes on the rebuild
+## How it behaves
 
-- **No runtime dependencies.** Font Awesome (CDN) became inline SVG in `Icon.svelte`, and AOS
-  became the `reveal` action. Fonts still come from Google Fonts via `app.html`.
-- **Content is data-driven.** Every string a visitor reads lives under `src/lib/data/`, so
-  updating the site after a job change or a new project is a one-file edit.
-- **The terminal** types itself out when scrolled into view. All lines stay in the DOM (hidden
-  with `opacity`) so the panel never changes height mid-animation and the content is available to
-  screen readers and with JS disabled. There is a **skip** button in its title bar.
-- **Motion is opt-out.** `prefers-reduced-motion` disables the typewriter, the reveals, and the
-  terminal sequence; without JS everything renders visible.
-- **Project artwork.** Projects without a screenshot (Retinal Disease Classification, iSkor) get
-  purpose-drawn inline SVG in `ProjectArt.svelte`, coloured from the same CSS custom properties as
-  the rest of the site so they stay in step with the palette.
-- **Photo mosaic.** The "Away from the keyboard" grid is a 4-column mosaic with one 2×2 feature
-  tile, collapsing to 2 columns on phones. Per-photo `object-position` values in `gallery.ts` keep
-  faces in frame; captions are hover-revealed on pointer devices and always shown on touch.
+- **Nothing is hidden without JS.** `app.html` sets `html[data-motion="on"]` before first paint,
+  and only when the visitor hasn't asked for reduced motion; every hidden-until-revealed style is
+  gated on that attribute. Add `?motion=off` to any URL to see the static version.
+- **Intro curtain** plays once per browser session on the home page (`?intro=off` skips it).
+  Reveals, the toolkit cycle and the trips slideshow wait for it to lift.
+- **Diagrams** are SVG drawn from `diagrams.ts`. The draw-in is pure CSS keyed off a
+  `data-drawn` attribute, so they prerender complete and animate when scrolled into view.
+- **Toolkit field** is sized in container-query units (`--u` is one pixel of the 680px design
+  square), so it scales correctly from the prerendered HTML with no resize observer.
+- **Theme** defaults to light; the toggle is saved in `localStorage` and `?theme=dark` overrides
+  it. The contact band, loader and lightbox are always dark.
+- **Location** appears in the hero, loader and contact section, all from `site.city`.
 
 ## Deployment
 

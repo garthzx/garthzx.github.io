@@ -1,146 +1,79 @@
 export type Role = {
 	id: string;
-	company: string;
-	href?: string;
-	title: string;
-	location: string;
-	period: string;
 	current?: boolean;
-	summary: string;
-	highlights: string[];
-	stack: string[];
+	dates: string;
+	place: string;
+	title: string;
+	company: string;
+	intro?: string;
+	bullets: string[];
 };
 
-export const experience: Role[] = [
+export const roles: Role[] = [
 	{
 		id: 'dentalflo',
-		company: 'Dentalflo AI',
-		href: 'https://dentalflo.ai',
-		title: 'Full-Stack Software Engineer',
-		location: 'Remote — Australia',
-		period: 'Aug 2025 — Present',
 		current: true,
-		summary:
-			'Backend-focused engineer on a multi-tenant dental practice-management and patient-communication platform. I personally own tenant provisioning, telephony integration, and online payments.',
-		highlights: [
-			'Architected the automated tenant provisioning pipeline — a durable, idempotent saga across five external systems (Neon PostgreSQL, AWS Secrets Manager, auth, schema migrations, transactional email) that turns a paid signup into a live clinic workspace with zero manual setup.',
-			'Designed a Redis-backed compensation stack so any failed provisioning step unwinds everything already completed, eliminating half-created tenants and the manual cleanup they used to need.',
-			'Re-platformed provisioning from a seven-job BullMQ flow onto Inngest durable execution — independent retries per step and one declarative failure handler, replacing seven copies of duplicated error handling.',
-			'Implemented the Vonage telephony integration end to end: a subaccount-binding saga with full compensating actions, plus inbound voice, SMS, and delivery-status webhooks bridging PSTN calls into LiveKit SIP.',
-			'Migrated every tenant from the legacy Vonage Voice API to the Messages API, with per-tenant capability declaration and a backfill script — no customer downtime.',
-			'Built the Stripe Connect booking-deposit system: connected-account onboarding, Checkout sessions with enforced expiry, branded short payment links, signature-verified webhooks, and automatic write-back of payment and appointment state to the clinic’s practice-management system.',
-			'Hardened payments against duplicate and orphaned charges — one payment link per appointment, auto-voiding on attendance, price sync from Stripe, and auto-disabling deposits when a clinic disconnects.',
-			'Rebuilt inbound SMS on a Redis queue and Inngest pipeline with typed delivery metadata, surfacing per-message delivery state in the staff conversation view.',
-			'Built the internal admin portal in SvelteKit with real-time provisioning progress over server-sent events, and shipped the public marketing site including SEO and pricing pages.'
-		],
-		stack: [
-			'TypeScript',
-			'Hono',
-			'SvelteKit',
-			'PostgreSQL',
-			'Drizzle',
-			'Redis',
-			'BullMQ',
-			'Inngest',
-			'Stripe',
-			'Vonage',
-			'LiveKit',
-			'AWS'
+		dates: 'Aug 2025 – Present',
+		place: 'Remote · Australia',
+		title: 'Full-Stack Software Engineer',
+		company: 'Dentalflo AI',
+		intro:
+			'Backend-focused engineer on a multi-tenant dental practice-management and patient-communication platform (TypeScript, Hono, SvelteKit, PostgreSQL, Redis, BullMQ, Inngest). Personally own tenant provisioning, telephony integration, and online payments.',
+		bullets: [
+			'Architected and shipped the platform’s automated tenant provisioning pipeline — a durable, idempotent saga spanning five external systems (Neon PostgreSQL, AWS Secrets Manager, authentication, schema migrations, transactional email) that converts a paid signup into a fully configured, live clinic workspace with zero manual setup by internal staff.',
+			'Built the Stripe Connect booking-deposit system, allowing patients to pay a deposit directly from an SMS or phone booking — removing manual invoicing and deposit chase-up calls from front-desk staff.',
+			'Implemented the Vonage telephony integration end to end: a subaccount-binding saga with full compensating actions, plus inbound voice, SMS, and delivery-status webhooks that bridge PSTN calls into LiveKit SIP.',
+			'Designed a Redis-backed compensation (rollback) stack so any failed provisioning step automatically unwinds every step already completed, eliminating half-created tenants and the manual cleanup they previously required; behavior is covered by unit tests.',
+			'Re-platformed provisioning from a seven-job BullMQ flow onto Inngest durable execution, giving each step independent retries and a single declarative failure handler — removing seven copies of duplicated error handling and making signup resilient to Stripe webhook retries.',
+			'Migrated the platform from the legacy Vonage Voice API to the Messages API across all tenants, including a per-tenant capability declaration and a backfill script, retiring the deprecated webhook configuration without customer downtime.',
+			'Hardened the payment flow against duplicate and orphaned charges: enforced one payment link per appointment (unique index plus de-duplication migration), auto-voided pending links once a patient attends, synchronized deposit prices from Stripe, and automatically disabled deposit collection when a clinic disconnects its Stripe account.',
+			'Rebuilt inbound SMS handling on a Redis queue and Inngest pipeline with typed delivery metadata, surfacing per-message delivery state directly in the staff conversation view and replacing a fragile single-worker design.',
+			'Built the internal admin portal in SvelteKit — real-time provisioning and deprovisioning progress over server-sent events, tenant lifecycle controls, phone-number binding, and self-service password reset across two applications — reducing engineer involvement in day-to-day account operations.',
+			'Shipped the public marketing site in SvelteKit, including page structure, SEO metadata, pricing pages, and performance/loading behavior, connecting the customer-facing front end to the same backend that provisions accounts.'
 		]
 	},
 	{
-		id: 'tropical-focus',
-		company: 'Tropical Focus Philippines Inc.',
+		id: 'tropical',
+		dates: 'Sep 2024 – Aug 2025',
+		place: 'Pasig City, PH',
 		title: 'Software Engineer / Business Analyst',
-		location: 'Pasig City, Philippines',
-		period: 'Sep 2024 — Aug 2025',
-		summary:
-			'Integrated enterprise building-automation software with IoT devices and sensors, collecting real-time telemetry to drive energy-cost optimisation across large commercial buildings.',
-		highlights: [
-			'Collected real-time telemetry from IoT devices and sensors into Microsoft SQL Server to drive energy-cost optimisation across large-scale commercial buildings.',
-			'Worked as both developer and business analyst — gathering requirements directly from mechanical engineers, energy consultants, and project managers, then translating operational problems into specs and shipping them in C# / ASP.NET Core.',
-			'Delivered data-access and reporting layers with stored procedures and Entity Framework, tailoring deployments to each client site.'
-		],
-		stack: ['C#', 'ASP.NET Core', 'Entity Framework', 'MS SQL Server', 'IoT']
+		company: 'Tropical Focus Philippines Inc.',
+		bullets: [
+			'Integrated enterprise building-automation software with IoT devices and sensors, collecting real-time telemetry into Microsoft SQL Server to drive energy-cost optimization across large-scale commercial buildings.',
+			'Served as both developer and business analyst: gathered requirements directly from mechanical engineers, energy consultants, and project managers, then translated operational problems into technical specifications and shipped them in C# / ASP.NET Core.',
+			'Delivered data-access and reporting layers with stored procedures and Entity Framework, and worked cross-functionally to tailor deployments to each client site.'
+		]
 	},
 	{
 		id: 'scaleup',
-		company: 'ScaleUp Solutions, Inc.',
+		dates: 'Jun 2023 – Dec 2023',
+		place: 'Quezon City, PH',
 		title: 'Web Developer (Part-Time) / Web Development Intern',
-		location: 'Quezon City, Philippines',
-		period: 'Jun 2023 — Dec 2023',
-		summary:
-			'Connected ERP systems to e-commerce platforms and built the storefronts customers actually shopped on.',
-		highlights: [
-			'Integrated ERP systems with e-commerce platforms so product, order, and inventory data flowed automatically, eliminating duplicate manual entry for client staff.',
-			'Built responsive, mobile-friendly storefront interfaces with HTML, SASS, JavaScript, ASP.NET Core, jQuery, and Bootstrap.',
+		company: 'ScaleUp Solutions, Inc.',
+		bullets: [
+			'Integrated ERP systems with e-commerce platforms so product, order, and inventory data flowed between them automatically, eliminating duplicate manual entry for client staff.',
+			'Built responsive, mobile-friendly storefront interfaces with HTML, SASS, JavaScript, ASP.NET Core, jQuery, and Bootstrap, applying modern UX practices to improve usability.',
 			'Worked directly with clients to capture business requirements and report project progress.'
-		],
-		stack: ['ASP.NET Core', 'JavaScript', 'SASS', 'jQuery', 'Bootstrap']
-	}
-];
-
-export const education = {
-	school: 'University of Saint Louis Tuguegarao',
-	location: 'Tuguegarao City, Philippines',
-	period: '2020 — 2024',
-	degree: 'BS Computer Science',
-	honors: 'Cum Laude',
-	thesis:
-		'Multi-label retinal disease classification on a high-class-imbalanced fundus image dataset (Python).'
-};
-
-export const achievements = [
-	{
-		title: 'AI research paper accepted at ICITE 2023',
-		detail:
-			'International Conference on Information Technology and Education — Boracay, Philippines',
-		date: 'Nov 2023'
-	},
-	{
-		title: 'Ranked 2nd — DICT Philippine Startup Challenge 7',
-		detail: 'Regional Pitching Competition',
-		date: 'Oct 2022'
-	}
-];
-
-export const skillGroups = [
-	{
-		label: 'Languages',
-		items: ['TypeScript', 'JavaScript', 'C#', 'Python', 'SQL', 'Kotlin']
-	},
-	{
-		label: 'Backend & APIs',
-		items: [
-			'Node.js',
-			'Hono',
-			'REST API design',
-			'Webhooks',
-			'Zod',
-			'OpenAPI',
-			'JWT',
-			'Better Auth',
-			'ASP.NET Core'
 		]
+	}
+];
+
+export const recognition = [
+	{
+		when: '2020 – 2024',
+		title: 'BS Computer Science, Cum Laude',
+		detail:
+			'University of Saint Louis Tuguegarao, Tuguegarao City. Thesis on multi-label retinal disease classification on a high-class-imbalanced fundus image dataset.'
 	},
 	{
-		label: 'Frontend',
-		items: ['Svelte 5', 'SvelteKit', 'Tailwind CSS', 'shadcn', 'Angular', 'SASS', 'Bootstrap']
+		when: 'November 2023',
+		title: 'Paper accepted at ICITE 2023',
+		detail:
+			'AI research paper at the International Conference on Information Technology and Education, Boracay, Philippines.'
 	},
 	{
-		label: 'Databases',
-		items: ['PostgreSQL', 'Neon', 'Supabase', 'MS SQL Server', 'Drizzle ORM', 'Entity Framework']
-	},
-	{
-		label: 'Automation',
-		items: ['Inngest', 'BullMQ', 'Redis queues', 'Saga patterns', 'Idempotent retries']
-	},
-	{
-		label: 'Integrations',
-		items: ['Stripe Connect', 'Vonage', 'Twilio', 'LiveKit', 'Dentally API']
-	},
-	{
-		label: 'Cloud & DevOps',
-		items: ['AWS S3', 'Secrets Manager', 'KMS', 'Turborepo', 'pnpm', 'Vitest', 'Vercel']
+		when: 'October 2022',
+		title: '2nd place, DICT Philippine Startup Challenge 7',
+		detail: 'Regional Pitching Competition.'
 	}
 ];
