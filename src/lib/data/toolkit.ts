@@ -62,13 +62,13 @@ export const tools: Tool[] = [
 	['Supabase', 'supabase', 3],
 	['SQL Server', null, 3],
 	['Drizzle', 'drizzle', 3],
-	['Inngest', null, 4],
-	['BullMQ', null, 4],
+	['Inngest', 'inngest', 4],
+	['BullMQ', 'bullmq', 4],
 	['Redis', 'redis', 4],
 	['Stripe', 'stripe', 5],
 	['Vonage', 'vonage', 5],
 	['Twilio', 'twilio', 5],
-	['LiveKit', null, 5],
+	['LiveKit', 'livekit', 5],
 	['AWS', 'amazonwebservices', 6],
 	['S3', 'amazons3', 6],
 	['Git', 'git', 6],
@@ -84,10 +84,7 @@ export const textMarks: Record<string, string> = {
 	'C#': 'C#',
 	SQL: 'SQL',
 	Neon: 'NEON',
-	'SQL Server': 'MSSQL',
-	Inngest: 'INN',
-	BullMQ: 'BMQ',
-	LiveKit: 'LK'
+	'SQL Server': 'MSSQL'
 };
 
 /** Three concentric orbits; together they hold all 40 tiles. */
